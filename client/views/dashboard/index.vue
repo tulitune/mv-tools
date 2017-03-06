@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="tile is-ancestor">
+    <!--<div class="tile is-ancestor">
       <div class="tile is-parent">
         <article class="tile is-child box">
           <p class="title">One</p>
@@ -25,28 +25,28 @@
           <p class="subtitle">Subtitle</p>
         </article>
       </div>
-    </div>
+    </div>-->
 
     <div class="tile is-ancestor">
       <div class="tile is-parent is-6">
         <article class="tile is-child box">
-          <h4 class="title">Five</h4>
+          <h4 class="title">Last 100 Jobs</h4>
           <div class="content">
             <chart :type="'doughnut'" :data="chartData"></chart>
           </div>
         </article>
       </div>
-      <div class="tile is-parent is-6">
+      <!--<div class="tile is-parent is-6">
         <article class="tile is-child box">
           <h4 class="title">Six</h4>
           <div class="content">
             <chart :type="'pie'" :data="chartData"></chart>
           </div>
         </article>
-      </div>
+      </div>-->
     </div>
 
-    <div class="tile is-ancestor">
+    <!--<div class="tile is-ancestor">
       <div class="tile is-vertical is-9">
         <div class="tile">
           <div class="tile is-parent">
@@ -100,13 +100,16 @@
             </div>
           </div>
         </article>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>
 
 <script>
 import Chart from 'vue-bulma-chartjs'
+
+const _PROJECT_ID = '570550f12031f000067c64a9'
+const _IRON_IO_URL = 'https://worker-aws-us-east-1.iron.io/2/projects/{projectId}/tasks?oauth={token}&page=100&per_page=100'.replace('{projectId}', _PROJECT_ID)
 
 export default {
   components: {
@@ -115,7 +118,8 @@ export default {
 
   data () {
     return {
-      data: [300, 50, 100]
+      data: [5, 5, 5, 5],
+      isloading: false
     }
   },
 
@@ -123,9 +127,10 @@ export default {
     chartData () {
       return {
         labels: [
-          'Red',
-          'Blue',
-          'Yellow'
+          'Error',
+          'Cancelled',
+          'Running',
+          'Complete'
         ],
         datasets: [{
           data: this.data,
@@ -138,15 +143,34 @@ export default {
       }
     }
   },
-
+  created () {
+    this.loadData()
+  },
   mounted () {
-    setInterval(() => {
-      // https://github.com/vuejs/vue/issues/2873
-      // Array.prototype.$set/$remove deprecated (use Vue.set or Array.prototype.splice instead)
-      this.data.forEach((item, i) => {
-        this.data.splice(i, 1, Math.ceil(Math.random() * 1000))
+  },
+
+  methods: {
+    loadData () {
+      this.isloading = true
+      this.data.length = 0
+      var _url = _IRON_IO_URL.replace('{token}', 'Rzx1lUsDcEnGcNvA2n2y')
+      this.$http({
+        url: _url,
+        transformResponse: [(data) => {
+          return JSON.parse(data)
+        }]
+      }).then((response) => {
+        let _tasks = response.data.tasks
+        let _completed = _tasks.filter(function(task){return task.status == 'complete'}).length
+        let _error = _tasks.filter(function(task){return task.status == 'error'}).length
+        let _running = _tasks.filter(function(task){return task.status == 'running'}).length
+        let _cancelled = _tasks.filter(function(task){return task.status == 'cancelled'}).length
+        this.isloading = false
+        this.data.push(_error, _cancelled, _running, _completed)
+      }).catch((error) => {
+        console.log(error)
       })
-    }, 1024)
+    }
   }
 }
 </script>

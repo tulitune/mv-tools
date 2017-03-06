@@ -1,23 +1,8 @@
 {
-  "name": "vue-admin",
-  "version": "0.1.12",
-  "description": "Vue Admin Panel Framework",
-  "repository": "vue-bulma/vue-admin",
-  "homepage": "https://admin.vuebulma.com",
-  "license": "MIT",
-  "author": {
-    "name": "Fangdun Cai",
-    "email": "cfddream@gmail.com",
-    "url": "fundon.me"
-  },
-  "keywords": [
-    "admin",
-    "bulma",
-    "dashboard",
-    "data",
-    "visualization",
-    "vue"
-  ],
+  "name": "mv-tools",
+  "version": "0.0.1",
+  "description": "MV-Tools Admin Panel Framework",
+  "homepage": "https://www.multiverse.com",
   "engines": {
     "node": ">=4",
     "npm": ">=3"
