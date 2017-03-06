@@ -153,7 +153,7 @@ export default {
     loadData () {
       this.isloading = true
       this.data.length = 0
-      var _url = _IRON_IO_URL.replace('{token}', 'Rzx1lUsDcEnGcNvA2n2y')
+      var _url = _IRON_IO_URL.replace('{token}', localStorage.mvToken)
       this.$http({
         url: _url,
         transformResponse: [(data) => {
