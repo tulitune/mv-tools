@@ -155,6 +155,7 @@ export default {
         value.push(item)
         localForage.setItem('mvHistory', value, function (err) {})
       })
+      this.loadSettings()
     },
     displayPayload(item) {
       this.payload = JSON.parse(item.payload)
