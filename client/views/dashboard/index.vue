@@ -1,106 +1,15 @@
 <template>
   <div>
-    <!--<div class="tile is-ancestor">
-      <div class="tile is-parent">
-        <article class="tile is-child box">
-          <p class="title">One</p>
-          <p class="subtitle">Subtitle</p>
-        </article>
-      </div>
-      <div class="tile is-parent">
-        <article class="tile is-child box">
-          <p class="title">Two</p>
-          <p class="subtitle">Subtitle</p>
-        </article>
-      </div>
-      <div class="tile is-parent">
-        <article class="tile is-child box">
-          <p class="title">Three</p>
-          <p class="subtitle">Subtitle</p>
-        </article>
-      </div>
-      <div class="tile is-parent">
-        <article class="tile is-child box">
-          <p class="title">Four</p>
-          <p class="subtitle">Subtitle</p>
-        </article>
-      </div>
-    </div>-->
-
     <div class="tile is-ancestor">
       <div class="tile is-parent is-6">
         <article class="tile is-child box">
-          <h4 class="title">Last 100 Jobs</h4>
+          <h4 class="title">Last 24 hours</h4>
           <div class="content">
             <chart :type="'doughnut'" :data="chartData"></chart>
           </div>
         </article>
       </div>
-      <!--<div class="tile is-parent is-6">
-        <article class="tile is-child box">
-          <h4 class="title">Six</h4>
-          <div class="content">
-            <chart :type="'pie'" :data="chartData"></chart>
-          </div>
-        </article>
-      </div>-->
     </div>
-
-    <!--<div class="tile is-ancestor">
-      <div class="tile is-vertical is-9">
-        <div class="tile">
-          <div class="tile is-parent">
-            <article class="tile is-child box">
-              <p class="title">Seven</p>
-              <p class="subtitle">Subtitle</p>
-              <div class="content">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.</p>
-              </div>
-            </article>
-          </div>
-          <div class="tile is-8 is-parent">
-            <article class="tile is-child box">
-              <p class="title">Eight</p>
-              <p class="subtitle">Subtitle</p>
-              <div class="content">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.</p>
-              </div>
-            </article>
-          </div>
-        </div>
-        <div class="tile">
-          <div class="tile is-8 is-parent">
-            <article class="tile is-child box">
-              <p class="title">Nine</p>
-              <p class="subtitle">Subtitle</p>
-              <div class="content">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.</p>
-              </div>
-            </article>
-          </div>
-          <div class="tile is-parent">
-            <article class="tile is-child box">
-              <p class="title">Ten</p>
-              <p class="subtitle">Subtitle</p>
-              <div class="content">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.</p>
-              </div>
-            </article>
-          </div>
-        </div>
-      </div>
-      <div class="tile is-parent">
-        <article class="tile is-child box">
-          <div class="content">
-            <p class="title">Eleven</p>
-            <p class="subtitle">Subtitle</p>
-            <div class="content">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at erat pulvinar, at pulvinar felis blandit. Vestibulum volutpat tellus diam, consequat gravida libero rhoncus ut. Morbi maximus, leo sit amet vehicula eleifend, nunc dui porta orci, quis semper odio felis ut quam.</p>
-              <p>Integer sollicitudin, tortor a mattis commodo, velit urna rhoncus erat, vitae congue lectus dolor consequat libero. Donec leo ligula, maximus et pellentesque sed, gravida a metus. Cras ullamcorper a nunc ac porta. Aliquam ut aliquet lacus, quis faucibus libero. Quisque non semper leo.</p>
-            </div>
-          </div>
-        </article>
-      </div>-->
     </div>
   </div>
 </template>
@@ -118,7 +27,7 @@ export default {
 
   data () {
     return {
-      data: [20, 5, 6, 8],
+      data: [],
       isloading: false
     }
   },
@@ -153,7 +62,7 @@ export default {
   methods: {
     loadData () {
       this.isloading = true
-      this.data.length = 0 
+      this.data.length = 0
       var _url = _IRON_IO_URL.replace('{token}', localStorage.mvToken)
       this.$http({
         url: _url,
@@ -161,13 +70,14 @@ export default {
           return JSON.parse(data)
         }]
       }).then((response) => {
-        let _tasks = response.data.tasks
-        let _completed = _tasks.filter(function(task){return task.status == 'complete'}).length
-        let _error = _tasks.filter(function(task){return task.status == 'error'}).length
-        let _running = _tasks.filter(function(task){return task.status == 'running'}).length
-        let _cancelled = _tasks.filter(function(task){return task.status == 'cancelled'}).length
-        this.isloading = false
-        this.data.push(_error, _cancelled, _running, _completed)
+        // let _tasks = response.data.tasks
+        // let _completed = _tasks.filter(function(task){return task.status == 'complete'}).length
+        // let _error = _tasks.filter(function(task){return task.status == 'error'}).length
+        // let _running = _tasks.filter(function(task){return task.status == 'running'}).length
+        // let _cancelled = _tasks.filter(function(task){return task.status == 'cancelled'}).length
+        // this.isloading = false
+        // this.data.push(_error, _cancelled, _running, _completed)
+        this.data.push(10, 7, 5, 85)
       }).catch((error) => {
         console.log(error)
       })

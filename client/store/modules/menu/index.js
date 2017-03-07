@@ -28,6 +28,15 @@ const state = {
         link: 'payload/index.vue'
       },
       component: lazyLoading('payload', true)
+    },
+    {
+      name: 'Settings',
+      path: '/settings',
+      meta: {
+        icon: 'fa-wrench',
+        link: 'settings/index.vue'
+      },
+      component: lazyLoading('settings', true)
     }
     // charts,
     // uifeatures,

@@ -12,7 +12,7 @@
             <img src="~assets/logo.svg" :alt="pkginfo.description">
             <tooltip :label="'v' + pkginfo.version" placement="right" type="success" size="small" :no-animate="true" :always="true" :rounded="true">
               <div class="is-hidden-mobile">
-                Multiverse Tools Dashboard
+                Multiverse Tools
               </div>
             </tooltip>
           </a>

@@ -8,14 +8,14 @@
             <a href="https://www.iron.io" class="link">Iron.io</a>
           </div>
           <div class="block">
-            <div class="control is-horizontal">
+            <!--<div class="control is-horizontal">
               <div class="control-label">
                 <label class="label">Token</label>
               </div>
               <div class="control is-fullwidth">
                   <input class="input" type="text" v-model="params.token">
               </div>
-            </div>
+            </div>-->
             <div class="control is-horizontal">
               <div class="control-label">
                 <label class="label">Task ID</label>
@@ -54,6 +54,7 @@
 
 <script>
 import Chart from 'vue-bulma-chartjs'
+var localForage = require('localforage')
 
 const _PROJECT_ID = '570550f12031f000067c64a9'
 const _IRON_IO_URL = 'https://worker-aws-us-east-1.iron.io/2/projects/{projectId}/tasks/{taskId}?oauth={token}'.replace('{projectId}', _PROJECT_ID)
@@ -66,20 +67,33 @@ export default {
   data () {
     return {
       params: {
-        token: localStorage.mvToken,
-        taskId: localStorage.mvTaskId
+        token: '',
+        taskId: '',
+        projectId: ''
       },
       payload: '',
       cost: '',
       isloading: false
     }
   },
-
+  created () {
+    this.loadSettings()
+  },
   methods: {
+    loadSettings() {
+      //  this.params.token = this.$store.state.settings.mvToken
+      //  this.params.projectId = this.$store.state.settings.mvProjectId
+
+      let _this = this
+      localForage.getItem('mvToken', function (err, value) {
+        _this.params.token = value
+      });
+      localForage.getItem('mvProjectId', function (err, value) {
+        _this.params.projectId = value
+      }); 
+    },
     loadData () {
       this.isloading = true
-      localStorage.mvToken = this.params.token
-      localStorage.mvTaskId = this.params.taskId
       var _url = _IRON_IO_URL.replace('{taskId}', this.params.taskId).replace('{token}', this.params.token)
       this.$http({
         url: _url,
@@ -94,6 +108,7 @@ export default {
         this.isloading = false
       }).catch((error) => {
         console.log(error)
+        this.isloading = false
       })
     }
   }
