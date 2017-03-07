@@ -109,7 +109,7 @@
 import Chart from 'vue-bulma-chartjs'
 
 const _PROJECT_ID = '570550f12031f000067c64a9'
-const _IRON_IO_URL = 'https://worker-aws-us-east-1.iron.io/2/projects/{projectId}/tasks?oauth={token}&page=100&per_page=100'.replace('{projectId}', _PROJECT_ID)
+const _IRON_IO_URL = 'https://worker-aws-us-east-1.iron.io/2/projects/{projectId}/tasks?oauth={token}&page=10&per_page=100'.replace('{projectId}', _PROJECT_ID)
 
 export default {
   components: {
@@ -118,7 +118,7 @@ export default {
 
   data () {
     return {
-      data: [5, 5, 5, 5],
+      data: [20, 5, 6, 8],
       isloading: false
     }
   },
@@ -135,9 +135,10 @@ export default {
         datasets: [{
           data: this.data,
           backgroundColor: [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56'
+            'red',
+            'orange',
+            'blue',
+            'green'
           ]
         }]
       }
@@ -152,7 +153,7 @@ export default {
   methods: {
     loadData () {
       this.isloading = true
-      this.data.length = 0
+      this.data.length = 0 
       var _url = _IRON_IO_URL.replace('{token}', localStorage.mvToken)
       this.$http({
         url: _url,

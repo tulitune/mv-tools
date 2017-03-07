@@ -1,7 +1,7 @@
 {
   "name": "mv-tools",
   "version": "1.0.0",
-  "description": "MV-Tools Admin Panel Framework",
+  "description": "MV-Tools",
   "homepage": "https://www.multiverse.com",
   "engines": {
     "node": ">=4",
