@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="tile is-ancestor">
-            <div class="tile is-parent is-4">
+      <div class="tile is-parent is-4">
         <article class="tile is-child box">
           <div class="block">
             <p class="title is-5">Request Params</p>
@@ -49,6 +49,37 @@
       </div>
 
     </div>
+    <div class="tile is-ancestor">
+      <div class="tile is-parent">
+        <article class="tile is-child box">
+          <h4 class="title">History</h4>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Cost</th>
+                <th>Created</th>
+                <th>Duration</th>
+                <th>Status</th>
+                <th>Payload</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in history">
+                <td>{{item.code_name}}</td>
+                <td>{{item.created_at}}</td>
+                <td>{{item.duration}}</td>
+                <td>{{item.status}}</td>
+                <td class="is-icon">
+                  <a @click="displayPayload(item)">
+                    <i class="fa fa-rocket fa-2x"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -73,6 +104,7 @@ export default {
       },
       payload: '',
       cost: '',
+      history: [],
       isloading: false
     }
   },
@@ -90,7 +122,10 @@ export default {
       });
       localForage.getItem('mvProjectId', function (err, value) {
         _this.params.projectId = value
-      }); 
+      });
+      localForage.getItem('mvHistory', function (err, value) {
+        _this.history = value
+      });
     },
     loadData () {
       this.isloading = true
@@ -104,12 +139,27 @@ export default {
         let _payload = JSON.parse(response.data.payload)
         _payload.upload.s3_url = ''
         this.payload = _payload
+        this.saveItemToStorage(response.data)
         this.cost = response.data.code_name
         this.isloading = false
       }).catch((error) => {
         console.log(error)
         this.isloading = false
       })
+    },
+    saveItemToStorage(item) {
+      localForage.getItem('mvHistory', function (err, value) {
+        if (value === null) {
+          value = []
+        }
+        value.push(item)
+        localForage.setItem('mvHistory', value, function (err) {})
+      })
+    },
+    displayPayload(item) {
+      this.payload = JSON.parse(item.payload)
+      this.payload.upload.s3_url = ''
+      this.cost = item.code_name
     }
   }
 }
