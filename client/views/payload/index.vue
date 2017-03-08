@@ -8,14 +8,6 @@
             <a href="https://www.iron.io" class="link">Iron.io</a>
           </div>
           <div class="block">
-            <!--<div class="control is-horizontal">
-              <div class="control-label">
-                <label class="label">Token</label>
-              </div>
-              <div class="control is-fullwidth">
-                  <input class="input" type="text" v-model="params.token">
-              </div>
-            </div>-->
             <div class="control is-horizontal">
               <div class="control-label">
                 <label class="label">Task ID</label>
@@ -66,7 +58,7 @@
           <table class="table">
             <thead>
               <tr>
-                <th>Cost</th>
+                <th>Code</th>
                 <th>Created</th>
                 <th>Task ID</th>
                 <th>Client ID</th>
@@ -79,7 +71,7 @@
               <tr v-for="item in history">
                 <td>{{item.code_name}}</td>
                 <td>{{item.created_at | formatDate}}</td>
-                <td>{{item.payload.job.task_id}}</td>
+                <td>{{item.id}}</td>
                 <td>{{item.payload.job.client_id}}</td>
                 <td>{{item.payload.job.partner_id}}</td>
                 <td>{{item.status}}</td>

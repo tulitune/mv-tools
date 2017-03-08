@@ -1,12 +1,20 @@
 <template>
   <div>
     <div class="tile is-ancestor">
-      <div class="tile is-parent is-6">
+      <div class="tile is-parent is-4">
         <article class="tile is-child box">
-          <h4 class="title">Last 24 hours</h4>
-          <div class="content">
-            <chart :type="'doughnut'" :data="chartData"></chart>
-          </div>
+          <h4 class="title">Last 24 Hours</h4>
+          <chart :type="'pie'" :data="chartData" :options="options"></chart>
+        </article>
+      </div>
+      <div class="tile is-parent is-4">
+        <article class="tile is-child box">
+          <h4 class="title">ONE</h4>
+        </article>
+      </div>
+      <div class="tile is-parent is-4">
+        <article class="tile is-child box">
+          <h4 class="title">TWO</h4>
         </article>
       </div>
     </div>
