@@ -58,6 +58,7 @@ export default {
   animation-duration: .377s;
 }
 
+$primary: #007aff; // Update to TUNE blue
 @import '~bulma';
 
 @import '~wysiwyg.css/wysiwyg.sass';

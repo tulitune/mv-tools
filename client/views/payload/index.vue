@@ -39,12 +39,12 @@
         <article class="tile is-child box">
         <p class="title control" :class="{'is-loading': isloading}">
           Payload of {{cost}}
-          <!--<span class="subtitle help is-danger is-5">
-            This demo only works under Development env
-          </span>-->
+          <span class="subtitle help is-danger is-5">
+            <button id="clipboardBtn"  class="fa fa-clipboard" data-clipboard-target="#payload">
+            </button>          
+          </span>
         </p>
-        <pre>{{payload}}</pre>
-        <!--<chart :type="'line'" :data="stockData" :options="options"></chart>-->
+        <pre id="payload">{{payload}}</pre>
       </article>
       </div>
 
@@ -52,13 +52,25 @@
     <div class="tile is-ancestor">
       <div class="tile is-parent">
         <article class="tile is-child box">
-          <h4 class="title">History</h4>
+            <div class="control is-grouped">
+            <h4 class="title">History</h4>
+            <p class="control">
+              <a class="button is-danger is-outlined" @click="clearHistory" style="margin-left: 20px">
+                <span class="icon">
+                  <i class="fa fa-times"></i>
+                </span>
+                <span>Clear</span>
+              </a>            
+              </p>
+           </div>
           <table class="table">
             <thead>
               <tr>
                 <th>Cost</th>
                 <th>Created</th>
-                <th>Duration</th>
+                <th>Task ID</th>
+                <th>Client ID</th>
+                <th>Partner ID</th>
                 <th>Status</th>
                 <th>Payload</th>
               </tr>
@@ -66,8 +78,10 @@
             <tbody>
               <tr v-for="item in history">
                 <td>{{item.code_name}}</td>
-                <td>{{item.created_at}}</td>
-                <td>{{item.duration}}</td>
+                <td>{{item.created_at | formatDate}}</td>
+                <td>{{item.payload.job.task_id}}</td>
+                <td>{{item.payload.job.client_id}}</td>
+                <td>{{item.payload.job.partner_id}}</td>
                 <td>{{item.status}}</td>
                 <td class="is-icon">
                   <a @click="displayPayload(item)">
@@ -85,6 +99,9 @@
 
 <script>
 import Chart from 'vue-bulma-chartjs'
+import Clipboard from 'clipboard'
+
+new Clipboard('#clipboardBtn')
 var localForage = require('localforage')
 
 const _PROJECT_ID = '570550f12031f000067c64a9'
@@ -142,6 +159,7 @@ export default {
         this.saveItemToStorage(response.data)
         this.cost = response.data.code_name
         this.isloading = false
+        this.loadSettings()
       }).catch((error) => {
         console.log(error)
         this.isloading = false
@@ -152,15 +170,22 @@ export default {
         if (value === null) {
           value = []
         }
+        let _payload = JSON.parse(item.payload)
+        item.payload = _payload
         value.push(item)
         localForage.setItem('mvHistory', value, function (err) {})
       })
       this.loadSettings()
     },
     displayPayload(item) {
-      this.payload = JSON.parse(item.payload)
+      this.payload = item.payload
       this.payload.upload.s3_url = ''
       this.cost = item.code_name
+    },
+    clearHistory() {
+      this.history = []
+      localForage.setItem('mvHistory', [], function (err) {})
+      this.loadSettings()
     }
   }
 }
