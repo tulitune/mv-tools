@@ -54,6 +54,8 @@ export default {
       localForage.setItem('mvProjectId', this.mvProjectId, function (err) {})
       this.$store.commit('setToken', this.mvToken)
       this.$store.commit('setProjectId', this.mvProjectId)
+      localStorage.mvToken = this.mvToken
+      localStorage.mvProjectId = this.mvProjectId
       console.log(this.$store.state.settings)
     }
   },
