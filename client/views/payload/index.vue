@@ -96,7 +96,7 @@ import Clipboard from 'clipboard'
 new Clipboard('#clipboardBtn')
 var localForage = require('localforage')
 
-const _PROJECT_ID = '570550f12031f000067c64a9'
+const _PROJECT_ID = localStorage.mvProjectId
 const _IRON_IO_URL = 'https://worker-aws-us-east-1.iron.io/2/projects/{projectId}/tasks/{taskId}?oauth={token}'.replace('{projectId}', _PROJECT_ID)
 
 export default {
@@ -122,9 +122,6 @@ export default {
   },
   methods: {
     loadSettings() {
-      //  this.params.token = this.$store.state.settings.mvToken
-      //  this.params.projectId = this.$store.state.settings.mvProjectId
-
       let _this = this
       localForage.getItem('mvToken', function (err, value) {
         _this.params.token = value

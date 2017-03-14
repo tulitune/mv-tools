@@ -44,7 +44,9 @@ export default {
   computed: mapGetters({
     sidebar: 'sidebar'
   }),
-
+  created() {
+    this.$store.commit('initSettings')
+  },
   methods: mapActions([
     'toggleDevice',
     'toggleSidebar'

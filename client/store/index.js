@@ -7,6 +7,8 @@ import * as getters from './getters'
 import app from './modules/app'
 import menu from './modules/menu'
 
+var localForage = require('localforage')
+
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -18,9 +20,28 @@ const store = new Vuex.Store({
     menu
   },
   state: {
-    pkg
+    pkg,
+    settings: {
+      token: '',
+      projectId: ''
+    }
   },
   mutations: {
+    setToken(state, token){
+      state.settings.token = token
+    },
+    setProjectId(state, projectId){
+      state.settings.projectId = projectId
+    },
+    initSettings(state){
+      let _state = state
+      localForage.getItem('mvToken', function (err, value) {
+        _state.settings.token = value
+      });
+      localForage.getItem('mvProjectId', function (err, value) {
+        _state.settings.projectId = value
+      }); 
+    }
   }
 })
 

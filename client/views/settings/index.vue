@@ -13,15 +13,6 @@
             <p class="control has-icon has-icon-right">
               <input class="input is-success" type="text" placeholder="Token" v-model="mvToken">
             </p>
-            <!--<label class="label">Subject</label>
-            <p class="control">
-              <span class="select">
-                <select>
-                  <option>Select dropdown</option>
-                  <option>With options</option>
-                </select>
-              </span>
-            </p>-->
             <p class="control">
               <button class="button is-primary" @click="saveSettings">Save</button>
               <button class="button is-link" @click="loadSettings">Cancel</button>
@@ -61,8 +52,9 @@ export default {
     saveSettings() {
       localForage.setItem('mvToken', this.mvToken, function (err) {})
       localForage.setItem('mvProjectId', this.mvProjectId, function (err) {})
-      // this.$store.state.settings.mvToken = this.mvToken
-      // this.$store.state.settings.mvProjectId = this.mvProjectId
+      this.$store.commit('setToken', this.mvToken)
+      this.$store.commit('setProjectId', this.mvProjectId)
+      console.log(this.$store.state.settings)
     }
   },
   created () {

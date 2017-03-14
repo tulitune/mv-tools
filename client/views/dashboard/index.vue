@@ -1,20 +1,10 @@
 <template>
   <div>
     <div class="tile is-ancestor">
-      <div class="tile is-parent is-4">
+      <div class="tile is-parent is-12">
         <article class="tile is-child box">
-          <h4 class="title">Last 24 Hours</h4>
-          <chart :type="'pie'" :data="chartData" :options="options"></chart>
-        </article>
-      </div>
-      <div class="tile is-parent is-4">
-        <article class="tile is-child box">
-          <h4 class="title">ONE</h4>
-        </article>
-      </div>
-      <div class="tile is-parent is-4">
-        <article class="tile is-child box">
-          <h4 class="title">TWO</h4>
+          <h4 class="title">Last 24 hours jobs</h4>
+          <chart :type="'bar'" :data="seriesData" :options="options"></chart>
         </article>
       </div>
     </div>
@@ -24,9 +14,13 @@
 
 <script>
 import Chart from 'vue-bulma-chartjs'
+var localForage = require('localforage')
 
-const _PROJECT_ID = '570550f12031f000067c64a9'
-const _IRON_IO_URL = 'https://worker-aws-us-east-1.iron.io/2/projects/{projectId}/tasks?oauth={token}&page=10&per_page=100'.replace('{projectId}', _PROJECT_ID)
+const _PROJECT_ID = localStorage.mvProjectId
+const _TOKEN = localStorage.mvToken
+const _IRON_IO_CODES_URL = 'https://worker-aws-us-east-1.iron.io/2/projects/{projectId}/codes?oauth={token}&page=0&per_page=100'.replace('{projectId}', _PROJECT_ID).replace('{token}', _TOKEN)
+const _IRON_IO_CODES_STATS_URL = 'https://worker-aws-us-east-1.iron.io/2/projects/{projectId}/codes/{code_id}/stats?oauth={token}&page=0&per_page=100'.replace('{projectId}', _PROJECT_ID).replace('{token}', _TOKEN)
+
 
 export default {
   components: {
@@ -35,57 +29,94 @@ export default {
 
   data () {
     return {
-      data: [],
-      isloading: false
+      data: [
+        [],
+        []
+      ],
+      params: {
+        token: '',
+        projectId: ''
+      },
+      isloading: false,
+      options: {
+        tooltips: {
+          mode: 'label'
+        }
+      },
+      backgroundColor: [
+        'rgba(0, 255, 0, 1)',
+        'rgba(255, 0, 0, 1)',
+      ],
+      series: ['Completed', 'Error'],
+      labels: [],
     }
   },
 
   computed: {
-    chartData () {
-      return {
-        labels: [
-          'Error',
-          'Cancelled',
-          'Running',
-          'Complete'
-        ],
-        datasets: [{
-          data: this.data,
-          backgroundColor: [
-            'red',
-            'orange',
-            'blue',
-            'green'
-          ]
-        }]
+    seriesData () {
+      let data = {
+        labels: this.labels
       }
+      data.datasets = this.series.map((e, i) => {
+        return {
+          data: this.data[i],
+          label: this.series[i],
+          backgroundColor: this.backgroundColor[i]
+        }
+      })
+      return data
     }
   },
   created () {
-    this.loadData()
+    this.loadSettings()
+    this.getStats()
   },
   mounted () {
   },
-
   methods: {
-    loadData () {
-      this.isloading = true
-      this.data.length = 0
-      var _url = _IRON_IO_URL.replace('{token}', localStorage.mvToken)
+    loadSettings() {
+      let _this = this
+      localForage.getItem('mvToken', function (err, value) {
+        _this.params.token = value
+      });
+      localForage.getItem('mvProjectId', function (err, value) {
+        _this.params.projectId = value
+      });
+    },
+    getCodeStats(codeId, codeName) {
+      let _url = _IRON_IO_CODES_STATS_URL.replace('{code_id}', codeId)
       this.$http({
         url: _url,
         transformResponse: [(data) => {
           return JSON.parse(data)
         }]
       }).then((response) => {
-        // let _tasks = response.data.tasks
-        // let _completed = _tasks.filter(function(task){return task.status == 'complete'}).length
-        // let _error = _tasks.filter(function(task){return task.status == 'error'}).length
-        // let _running = _tasks.filter(function(task){return task.status == 'running'}).length
-        // let _cancelled = _tasks.filter(function(task){return task.status == 'cancelled'}).length
-        // this.isloading = false
-        // this.data.push(_error, _cancelled, _running, _completed)
-        this.data.push(10, 7, 5, 85)
+        // this.codesStats.push({
+        //     key:   codeId,
+        //     value: response.data
+        // });
+        this.labels.push(codeName)
+        this.data[0].push(response.data.complete)
+        this.data[1].push(response.data.error)
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
+
+    getStats () {
+      this.isloading = true
+      let _url = _IRON_IO_CODES_URL
+      this.$http({
+        url: _url,
+        transformResponse: [(data) => {
+          return JSON.parse(data)
+        }]
+      }).then((response) => {
+        let codes = response.data.codes
+        let arrayLength = response.data.codes.length;
+        for (let i = 0; i < arrayLength; i++) {
+            this.getCodeStats(codes[i].id, codes[i].name)
+        }
       }).catch((error) => {
         console.log(error)
       })
