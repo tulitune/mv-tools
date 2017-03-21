@@ -9,15 +9,13 @@
         </div>
         <div class="nav-center">
           <a class="nav-item hero-brand" href="/">
-            <img src="~assets/logo.svg" :alt="pkginfo.description">
-            <tooltip :label="'v' + pkginfo.version" placement="right" type="success" size="small" :no-animate="true" :always="true" :rounded="true">
-              <div class="is-hidden-mobile">
-                Multiverse Tools
-              </div>
-            </tooltip>
+          <img src="~assets/logo.svg" :alt="pkginfo.description">
+          <span class="navbar-title">Multiverse</span><span class="navbar-title">Tools</span>
           </a>
         </div>
-        <div class="nav-right is-flex"></div>
+        <div class="nav-right is-flex">
+          <span class="version-label">v {{pkginfo.version}}</span>
+        </div>
       </nav>
     </div>
   </section>
@@ -72,13 +70,17 @@ export default {
   }
 }
 
+.version-label {
+  margin-right: 10px;
+  margin-top: 13px;
+}
+
 .hero-brand {
-  .vue {
-    margin-left: 10px;
-    color: #36AC70;
-  }
-  .admin {
-    color: #28374B;
+  .navbar-title {
+    margin-left: 5px;
+    color: #007aff;
+    font-weight: bold;
+    font-size: 15px;
   }
 }
 </style>

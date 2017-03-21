@@ -70,7 +70,6 @@ export default {
     this.getStats()
   },
   mounted () {
-    console.log('mounted')
   },
   methods: {
     dataIsNotEmpty() {

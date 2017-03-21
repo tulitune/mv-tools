@@ -9,9 +9,9 @@ export default new Router({
   scrollBehavior: () => ({ y: 0 }),
   routes: [
     {
-      name: 'Home',
+      name: 'Dashboard',
       path: '/',
-      component: require('../views/Home')
+      component: require('../views/dashboard')
     },
     ...generateRoutesFromMenu(menuModule.state.items),
     {
