@@ -3,7 +3,7 @@
     <div class="tile is-ancestor">
       <div class="tile is-parent is-12">
         <article class="tile is-child box">
-          <h4 class="title">Last 24 hours jobs</h4>
+          <h4 class="title">Jobs in the last 24 hours</h4>
           <chart v-if="dataIsNotEmpty()" :type="'bar'" :data="seriesData" :options="options"></chart>
           <h1 v-if="params.token === undefined">Provide Iron.io Project ID and Token in <a href="#settings">Settings</a></h1>
         </article>
