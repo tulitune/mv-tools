@@ -4,7 +4,7 @@
       <div class="tile is-parent is-4">
         <article class="tile is-child box">
           <div class="block">
-            <!--<p class="title is-5">Request Params</p>-->
+            <p class="title is-5">Use Task ID or Task log url</p>
             <!--<a href="https://www.iron.io" class="link">Iron.io</a>-->
           </div>
           <div class="block">
@@ -14,6 +14,14 @@
               </div>
               <div class="control is-fullwidth">
                   <input class="input" type="text" v-model="params.taskId">
+              </div>
+            </div>
+            <div class="control is-horizontal">
+              <div class="control-label">
+                <label class="label">Task Log URL</label>
+              </div>
+              <div class="control is-fullwidth">
+                  <input class="input" type="text" v-model="params.taskUrl">
               </div>
             </div>
             <div class="control is-horizontal">
@@ -104,6 +112,7 @@ export default {
       params: {
         token: '',
         taskId: '',
+        taskUrl: '',
         projectId: ''
       },
       payload: '',
@@ -126,6 +135,9 @@ export default {
     },
     loadData () {
       this.isloading = true
+      if (this.params.taskUrl != ''){
+        this.params.taskId = this.params.taskUrl.split('/')[7]
+      }
       var _url = _IRON_IO_URL.replace('{projectId}', this.params.projectId).replace('{taskId}', this.params.taskId).replace('{token}', this.params.token)
       this.$http({
         url: _url,
