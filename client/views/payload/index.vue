@@ -4,8 +4,8 @@
       <div class="tile is-parent is-4">
         <article class="tile is-child box">
           <div class="block">
-            <p class="title is-5">Request Params</p>
-            <a href="https://www.iron.io" class="link">Iron.io</a>
+            <!--<p class="title is-5">Request Params</p>-->
+            <!--<a href="https://www.iron.io" class="link">Iron.io</a>-->
           </div>
           <div class="block">
             <div class="control is-horizontal">
@@ -31,12 +31,8 @@
         <article class="tile is-child box">
         <p class="title control" :class="{'is-loading': isloading}">
           Payload of {{cost}}
-          <span class="subtitle help is-danger is-5">
-            <button id="clipboardBtn"  class="fa fa-clipboard" data-clipboard-target="#payload">
-            </button>          
-          </span>
         </p>
-        <pre id="payload">{{payload}}</pre>
+        <pre id="payload" class="relative-pre">{{payload}}<div class="top-right"><button v-if="payload !== ''" id="clipboardBtn" class="button is-primary" data-clipboard-target="#payload">Copy To Clipboard</button></div></pre>
       </article>
       </div>
 
@@ -94,7 +90,6 @@ import Chart from 'vue-bulma-chartjs'
 import Clipboard from 'clipboard'
 
 new Clipboard('#clipboardBtn')
-var localForage = require('localforage')
 
 const _PROJECT_ID = localStorage.mvProjectId
 const _IRON_IO_URL = 'https://worker-aws-us-east-1.iron.io/2/projects/{projectId}/tasks/{taskId}?oauth={token}'.replace('{projectId}', _PROJECT_ID)
@@ -122,20 +117,16 @@ export default {
   },
   methods: {
     loadSettings() {
-      let _this = this
-      localForage.getItem('mvToken', function (err, value) {
-        _this.params.token = value
-      });
-      localForage.getItem('mvProjectId', function (err, value) {
-        _this.params.projectId = value
-      });
-      localForage.getItem('mvHistory', function (err, value) {
-        _this.history = value
-      });
+      this.params.token = localStorage.mvToken
+      this.params.projectId = localStorage.mvProjectId
+      if (localStorage.mvHistory === undefined){
+        localStorage.mvHistory = '[]'
+      }
+      this.history = JSON.parse(localStorage.mvHistory)
     },
     loadData () {
       this.isloading = true
-      var _url = _IRON_IO_URL.replace('{taskId}', this.params.taskId).replace('{token}', this.params.token)
+      var _url = _IRON_IO_URL.replace('{projectId}', this.params.projectId).replace('{taskId}', this.params.taskId).replace('{token}', this.params.token)
       this.$http({
         url: _url,
         transformResponse: [(data) => {
@@ -148,22 +139,20 @@ export default {
         this.saveItemToStorage(response.data)
         this.cost = response.data.code_name
         this.isloading = false
-        this.loadSettings()
       }).catch((error) => {
         console.log(error)
         this.isloading = false
       })
     },
     saveItemToStorage(item) {
-      localForage.getItem('mvHistory', function (err, value) {
-        if (value === null) {
-          value = []
-        }
-        let _payload = JSON.parse(item.payload)
-        item.payload = _payload
-        value.push(item)
-        localForage.setItem('mvHistory', value, function (err) {})
-      })
+      let currentHistory = JSON.parse(localStorage.mvHistory)
+      if (currentHistory == null) {
+        currentHistory = []
+      }
+      let _payload = JSON.parse(item.payload)
+      item.payload = _payload
+      currentHistory.push(item)
+      localStorage.mvHistory = JSON.stringify(currentHistory)
       this.loadSettings()
     },
     displayPayload(item) {
@@ -173,7 +162,7 @@ export default {
     },
     clearHistory() {
       this.history = []
-      localForage.setItem('mvHistory', [], function (err) {})
+      localStorage.mvHistory = null
       this.loadSettings()
     }
   }
@@ -181,4 +170,12 @@ export default {
 </script>
 
 <style scoped>
+ .relative-pre{
+   position:relative;
+  }
+ .top-right{
+   position:absolute;
+   top:0;
+   right:0;
+  }
 </style>

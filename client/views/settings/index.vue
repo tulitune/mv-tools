@@ -27,7 +27,6 @@
 <script>
 import Cleave from 'vue-cleave'
 import 'cleave.js/dist/addons/cleave-phone.cn'
-var localForage = require('localforage')
 
 export default {
   components: {
@@ -41,22 +40,15 @@ export default {
   },
   methods: {
     loadSettings() {
-      let _this = this
-      localForage.getItem('mvToken', function (err, value) {
-        _this.mvToken = value
-      });
-      localForage.getItem('mvProjectId', function (err, value) {
-        _this.mvProjectId = value
-      }); 
+      this.mvToken = localStorage.mvToken 
+      this.mvProjectId = localStorage.mvProjectId
     },
     saveSettings() {
-      localForage.setItem('mvToken', this.mvToken, function (err) {})
-      localForage.setItem('mvProjectId', this.mvProjectId, function (err) {})
       this.$store.commit('setToken', this.mvToken)
       this.$store.commit('setProjectId', this.mvProjectId)
       localStorage.mvToken = this.mvToken
       localStorage.mvProjectId = this.mvProjectId
-      console.log(this.$store.state.settings)
+      // console.log(this.$store.state.settings)
     }
   },
   created () {

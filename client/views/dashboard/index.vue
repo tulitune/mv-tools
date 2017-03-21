@@ -4,7 +4,8 @@
       <div class="tile is-parent is-12">
         <article class="tile is-child box">
           <h4 class="title">Last 24 hours jobs</h4>
-          <chart :type="'bar'" :data="seriesData" :options="options"></chart>
+          <chart v-if="dataIsNotEmpty()" :type="'bar'" :data="seriesData" :options="options"></chart>
+          <h1 v-if="params.token === undefined">Provide Iron.io Project ID and Token in <a href="#settings">Settings</a></h1>
         </article>
       </div>
     </div>
@@ -14,12 +15,9 @@
 
 <script>
 import Chart from 'vue-bulma-chartjs'
-var localForage = require('localforage')
 
-const _PROJECT_ID = localStorage.mvProjectId
-const _TOKEN = localStorage.mvToken
-const _IRON_IO_CODES_URL = 'https://worker-aws-us-east-1.iron.io/2/projects/{projectId}/codes?oauth={token}&page=0&per_page=100'.replace('{projectId}', _PROJECT_ID).replace('{token}', _TOKEN)
-const _IRON_IO_CODES_STATS_URL = 'https://worker-aws-us-east-1.iron.io/2/projects/{projectId}/codes/{code_id}/stats?oauth={token}&page=0&per_page=100'.replace('{projectId}', _PROJECT_ID).replace('{token}', _TOKEN)
+const _IRON_IO_CODES_URL = 'https://worker-aws-us-east-1.iron.io/2/projects/{projectId}/codes?oauth={token}&page=0&per_page=100'
+const _IRON_IO_CODES_STATS_URL = 'https://worker-aws-us-east-1.iron.io/2/projects/{projectId}/codes/{code_id}/stats?oauth={token}&page=0&per_page=100'
 
 
 export default {
@@ -72,29 +70,24 @@ export default {
     this.getStats()
   },
   mounted () {
+    console.log('mounted')
   },
   methods: {
+    dataIsNotEmpty() {
+      return this.data[0][0] != undefined
+    },
     loadSettings() {
-      let _this = this
-      localForage.getItem('mvToken', function (err, value) {
-        _this.params.token = value
-      });
-      localForage.getItem('mvProjectId', function (err, value) {
-        _this.params.projectId = value
-      });
+      this.params.projectId = localStorage.mvProjectId
+      this.params.token = localStorage.mvToken
     },
     getCodeStats(codeId, codeName) {
-      let _url = _IRON_IO_CODES_STATS_URL.replace('{code_id}', codeId)
+      let _url = _IRON_IO_CODES_STATS_URL.replace('{projectId}', this.params.projectId).replace('{token}', this.params.token).replace('{code_id}', codeId)
       this.$http({
         url: _url,
         transformResponse: [(data) => {
           return JSON.parse(data)
         }]
       }).then((response) => {
-        // this.codesStats.push({
-        //     key:   codeId,
-        //     value: response.data
-        // });
         this.labels.push(codeName)
         this.data[0].push(response.data.complete)
         this.data[1].push(response.data.error)
@@ -105,7 +98,7 @@ export default {
 
     getStats () {
       this.isloading = true
-      let _url = _IRON_IO_CODES_URL
+      let _url = _IRON_IO_CODES_URL.replace('{projectId}', this.params.projectId).replace('{token}', this.params.token)
       this.$http({
         url: _url,
         transformResponse: [(data) => {
