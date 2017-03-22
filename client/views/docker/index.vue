@@ -10,7 +10,7 @@
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Size</th>
+                <th>Size (MB)</th>
                 <th>Last Updated</th>
                 <th>Last Updater</th>
               </tr>
@@ -18,8 +18,8 @@
             <tbody>
               <tr v-for="item in data">
                 <td>{{item.name}}</td>
-                <td>{{item.full_size}}</td>
-                <td>{{item.last_updated | formatDate}}</td>
+                <td>{{item.full_size | sizeFormat}}</td>
+                <td>{{item.last_updated | timeFromNow}}</td>
                 <td><img :src="item.last_updater | imageUpdater" height="30" width="30"><img></td>
               </tr>
             </tbody>

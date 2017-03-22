@@ -7,6 +7,18 @@ Vue.filter('formatDate', function(value) {
   }
 })
 
+Vue.filter('timeFromNow', function(value) {
+  if (value) {
+    return moment(value).fromNow()
+  }
+})
+
+Vue.filter('sizeFormat', function(value) {
+  if (value) {
+    return parseInt(value / 1000000)
+  }
+})
+
 Vue.filter('imageUpdater', function(value) {
   if (value) {
     // Ohad
