@@ -22,12 +22,21 @@ const state = {
     },
     {
       name: 'Get Payload',
-      path: '/getPayload',
+      path: '/getpayload',
       meta: {
         icon: 'fa-rocket',
         link: 'payload/index.vue'
       },
       component: lazyLoading('payload', true)
+    },
+    {
+      name: 'Docker Hub',
+      path: '/dockerhub',
+      meta: {
+        icon: 'fa-database',
+        link: 'docker/index.vue'
+      },
+      component: lazyLoading('docker', true)
     },
     {
       name: 'Settings',
