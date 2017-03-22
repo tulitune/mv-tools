@@ -39,6 +39,24 @@ const state = {
       component: lazyLoading('docker', true)
     },
     {
+      name: 'GitHub',
+      path: '/github',
+      meta: {
+        icon: 'fa-github',
+        link: 'github/index.vue'
+      },
+      component: lazyLoading('github', true)
+    },
+    {
+      name: 'GitLab',
+      path: '/gitlab',
+      meta: {
+        icon: 'fa-gitlab',
+        link: 'gitlab/index.vue'
+      },
+      component: lazyLoading('gitlab', true)
+    },      
+    {
       name: 'Settings',
       path: '/settings',
       meta: {

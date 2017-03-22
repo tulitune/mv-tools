@@ -20,6 +20,36 @@
           </div>
         </article>
       </div>
+      <div class="tile is-parent is-4">
+        <article class="tile is-child box">
+          <h1 class="title">Github</h1>
+          <div class="block">
+            <label class="label">SSH Key</label>
+            <p class="control">
+              <input class="input" type="text" placeholder="Key" v-model="mvGithubSsh">
+            </p>
+            <!--<p class="control">
+              <button class="button is-primary" @click="saveSettings">Save</button>
+              <button class="button is-link" @click="loadSettings">Cancel</button>
+            </p>-->
+          </div>
+        </article>
+      </div>
+      <div class="tile is-parent is-4">
+        <article class="tile is-child box">
+          <h1 class="title">GitLab</h1>
+          <div class="block">
+            <label class="label">Token</label>
+            <p class="control">
+              <input class="input" type="text" placeholder="Token" v-model="mvGitlabToken">
+            </p>
+            <!--<p class="control">
+              <button class="button is-primary" @click="saveSettings">Save</button>
+              <button class="button is-link" @click="loadSettings">Cancel</button>
+            </p>-->
+          </div>
+        </article>
+      </div>
     </div>
   </div>
 </template>
@@ -35,19 +65,23 @@ export default {
   data () {
     return {
       mvProjectId: '',
-      mvToken: ''
+      mvToken: '',
+      mvGitlabToken: '',
+      mvGithubSsh: ''
     }
   },
   methods: {
     loadSettings() {
       this.mvToken = localStorage.mvToken 
       this.mvProjectId = localStorage.mvProjectId
+      this.mvGitlabToken = localStorage.mvGitlabToken
     },
     saveSettings() {
       this.$store.commit('setToken', this.mvToken)
       this.$store.commit('setProjectId', this.mvProjectId)
       localStorage.mvToken = this.mvToken
       localStorage.mvProjectId = this.mvProjectId
+      localStorage.mvGitlabToken = this.mvGitlabToken
       // console.log(this.$store.state.settings)
     }
   },
