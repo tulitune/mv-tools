@@ -30,6 +30,15 @@ const state = {
       component: lazyLoading('payload', true)
     },
     {
+      name: 'Get Credentials',
+      path: '/credz',
+      meta: {
+        icon: 'fa-lock',
+        link: 'credz/index.vue'
+      },
+      component: lazyLoading('credz', true)
+    },
+    {
       name: 'Docker Hub',
       path: '/dockerhub',
       meta: {

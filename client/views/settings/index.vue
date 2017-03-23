@@ -14,10 +14,6 @@
             <p class="control has-icon has-icon-right">
               <input class="input is-success" type="text" placeholder="Token" v-model="mvToken">
             </p>
-            <p class="control">
-              <button class="button is-primary" @click="saveSettings">Save</button>
-              <button class="button is-link" @click="loadSettings">Cancel</button>
-            </p>
           </div>
         </article>
       </div>
@@ -50,10 +46,51 @@
             <p class="control">
               <input class="input" type="text" placeholder="Token" v-model="mvGitlabToken">
             </p>
+          </div>
+        </article>
+      </div>
+      <div class="tile is-parent is-4">
+        <article class="tile is-child box">
+          <img src="https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo.png" width="25" height="25"></img>
+          <h1 class="title">Get Credentials</h1>
+          <div class="block">
+            <label class="label">Token</label>
+            <p class="control">
+              <input class="input" type="text" placeholder="Token" v-model="mvGitlabToken">
+            </p>
             <!--<p class="control">
               <button class="button is-primary" @click="saveSettings">Save</button>
               <button class="button is-link" @click="loadSettings">Cancel</button>
             </p>-->
+          </div>
+        </article>
+      </div>
+    </div>
+    <div class="tile is-ancestor">
+      <div class="tile is-parent is-4">
+        <article class="tile is-child box">
+          <h1 class="title">Get Credentials</h1>
+          <div class="block">
+            <label class="label">Host</label>
+            <p class="control">
+              <input class="input" type="text" placeholder="Host" v-model="mvGetCredentialsHost">
+            </p>
+            <label class="label">Port</label>
+            <p class="control">
+              <input class="input" type="text" placeholder="Port" v-model="mvGetCredentialsPort">
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+    <div class="tile is-ancestor">
+      <div class="tile is-parent is-4">
+        <article class="tile is-child box">
+          <div class="block">
+            <p class="control">
+              <button class="button is-primary" @click="saveSettings">Save</button>
+              <button class="button is-link" @click="loadSettings">Cancel</button>
+            </p>
           </div>
         </article>
       </div>
@@ -75,7 +112,9 @@ export default {
       mvToken: '',
       mvGitlabToken: '',
       mvGithubToken: '',
-      mvGithubUser: ''
+      mvGithubUser: '',
+      mvGetCredentialsHost: 'localhost',
+      mvGetCredentialsPort: '12345',
     }
   },
   methods: {
@@ -85,6 +124,8 @@ export default {
       this.mvGitlabToken = localStorage.mvGitlabToken
       this.mvGithubToken = localStorage.mvGithubToken
       this.mvGithubUser = localStorage.mvGithubUser
+      this.mvGetCredentialsHost = localStorage.mvGetCredentialsHost
+      this.mvGetCredentialsPort = localStorage.mvGetCredentialsPort
     },
     saveSettings() {
       this.$store.commit('setToken', this.mvToken)
@@ -94,6 +135,8 @@ export default {
       localStorage.mvGitlabToken = this.mvGitlabToken
       localStorage.mvGithubToken = this.mvGithubToken
       localStorage.mvGithubUser = this.mvGithubUser
+      localStorage.mvGetCredentialsHost = this.mvGetCredentialsHost
+      localStorage.mvGetCredentialsPort = this.mvGetCredentialsPort
       // console.log(this.$store.state.settings)
     }
   },
