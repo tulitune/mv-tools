@@ -3,6 +3,7 @@
     <div class="tile is-ancestor">
       <div class="tile is-parent is-4">
         <article class="tile is-child box">
+          <img src="https://www.iron.io/wp-content/uploads/2016/02/290x160_Iron_white_logo.png" height="40" width="40"></img>
           <h1 class="title">Iron.io</h1>
           <div class="block">
             <label class="label">Project ID</label>
@@ -22,11 +23,16 @@
       </div>
       <div class="tile is-parent is-4">
         <article class="tile is-child box">
-          <h1 class="title">Github</h1>
+          <i class="fa fa-github fa-2x" aria-hidden="true"></i>
+          <h1 class="title">GitHub</h1>
           <div class="block">
-            <label class="label">SSH Key</label>
+          <label class="label">Username</label>
             <p class="control">
-              <input class="input" type="text" placeholder="Key" v-model="mvGithubSsh">
+              <input class="input" type="text" placeholder="Username" v-model="mvGithubUser">
+            </p>
+            <label class="label">Token</label>
+            <p class="control">
+              <input class="input" type="text" placeholder="Token" v-model="mvGithubToken">
             </p>
             <!--<p class="control">
               <button class="button is-primary" @click="saveSettings">Save</button>
@@ -37,6 +43,7 @@
       </div>
       <div class="tile is-parent is-4">
         <article class="tile is-child box">
+          <img src="https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo.png" width="25" height="25"></img>
           <h1 class="title">GitLab</h1>
           <div class="block">
             <label class="label">Token</label>
@@ -67,7 +74,8 @@ export default {
       mvProjectId: '',
       mvToken: '',
       mvGitlabToken: '',
-      mvGithubSsh: ''
+      mvGithubToken: '',
+      mvGithubUser: ''
     }
   },
   methods: {
@@ -75,6 +83,8 @@ export default {
       this.mvToken = localStorage.mvToken 
       this.mvProjectId = localStorage.mvProjectId
       this.mvGitlabToken = localStorage.mvGitlabToken
+      this.mvGithubToken = localStorage.mvGithubToken
+      this.mvGithubUser = localStorage.mvGithubUser
     },
     saveSettings() {
       this.$store.commit('setToken', this.mvToken)
@@ -82,6 +92,8 @@ export default {
       localStorage.mvToken = this.mvToken
       localStorage.mvProjectId = this.mvProjectId
       localStorage.mvGitlabToken = this.mvGitlabToken
+      localStorage.mvGithubToken = this.mvGithubToken
+      localStorage.mvGithubUser = this.mvGithubUser
       // console.log(this.$store.state.settings)
     }
   },
